@@ -94,5 +94,26 @@ Screens for the design of this application are in the `screens/` directory. Each
 
 ---
 
+## API
+
+The application interacts with the Jules API to fetch data and perform actions. Below are examples of the API calls and responses.
+
+### Sources
+This endpoint retrieves a list of the user's connected source code repositories.
+
+See an example API trace: [`api-traces/sources.txt`](api-traces/sources.txt)
+
+### Sessions
+This endpoint retrieves a list of active and past sessions.
+
+See an example API trace: [`api-traces/sessions.txt`](api-traces/sessions.txt)
+
+### Activities
+This endpoint retrieves the activities for a given session. Activities represent the conversation between the user and the agent.
+
+See an example API trace: [`api-traces/activities.txt`](api-traces/activities.txt)
+
+---
+
 ## License
 [Apache](LICENSE)
