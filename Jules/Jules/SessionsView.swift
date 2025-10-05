@@ -196,8 +196,7 @@ struct SessionRow: View {
                     }
                 }
             }
-
-            Spacer()
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             Image(systemName: "chevron.right")
                 .foregroundColor(.gray)
