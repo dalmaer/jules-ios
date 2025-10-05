@@ -116,6 +116,9 @@ struct SessionsView: View {
         .task {
             await loadSessions()
         }
+        .onAppear {
+            RecentSourcesManager.shared.addRecentSource(id: source.id)
+        }
     }
 
     private func loadSessions() async {

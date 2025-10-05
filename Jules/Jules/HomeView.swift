@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var sources: [Source] = []
+    @State private var recentSources: [Source] = []
+    @State private var otherSources: [Source] = []
     @State private var isLoading = false
     @State private var showSettings = false
     @State private var errorMessage: String?
@@ -60,12 +61,7 @@ struct HomeView: View {
                     .padding()
 
                     // Content
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Connected Sources")
-                            .font(.title3)
-                            .foregroundColor(.gray)
-                            .padding(.horizontal)
-
+                    VStack(alignment: .leading, spacing: 0) {
                         if isLoading {
                             Spacer()
                             HStack {
@@ -96,7 +92,7 @@ struct HomeView: View {
                             }
                             .padding()
                             Spacer()
-                        } else if sources.isEmpty {
+                        } else if recentSources.isEmpty && otherSources.isEmpty {
                             Spacer()
                             VStack(spacing: 12) {
                                 Image(systemName: "folder")
@@ -109,14 +105,42 @@ struct HomeView: View {
                             Spacer()
                         } else {
                             ScrollView {
-                                VStack(spacing: 12) {
-                                    ForEach(sources) { source in
-                                        NavigationLink(value: source) {
-                                            SourceRow(source: source)
+                                VStack(alignment: .leading, spacing: 12) {
+                                    if !recentSources.isEmpty {
+                                        Text("Recent Sources")
+                                            .font(.title3)
+                                            .foregroundColor(.gray)
+                                            .padding(.horizontal)
+                                            .padding(.bottom, 4)
+
+                                        VStack(spacing: 12) {
+                                            ForEach(recentSources) { source in
+                                                NavigationLink(value: source) {
+                                                    SourceRow(source: source, isRecent: true)
+                                                }
+                                            }
                                         }
+                                        .padding(.horizontal)
+                                    }
+
+                                    if !otherSources.isEmpty {
+                                        Text("All Sources")
+                                            .font(.title3)
+                                            .foregroundColor(.gray)
+                                            .padding(.horizontal)
+                                            .padding(.top, recentSources.isEmpty ? 0 : 20)
+                                            .padding(.bottom, 4)
+
+                                        VStack(spacing: 12) {
+                                            ForEach(otherSources) { source in
+                                                NavigationLink(value: source) {
+                                                    SourceRow(source: source)
+                                                }
+                                            }
+                                        }
+                                        .padding(.horizontal)
                                     }
                                 }
-                                .padding(.horizontal)
                             }
                         }
 
@@ -143,10 +167,26 @@ struct HomeView: View {
 
         do {
             let fetchedSources = try await JulesAPIClient.shared.fetchSources()
-            // Sort sources by repository name
-            sources = fetchedSources.sorted {
+            let recentIDs = RecentSourcesManager.shared.getRecentSourceIDs()
+            let recentIDSet = Set(recentIDs)
+
+            let sourceDict = Dictionary(uniqueKeysWithValues: fetchedSources.map { ($0.id, $0) })
+
+            var recent: [Source] = []
+            for id in recentIDs {
+                if let source = sourceDict[id] {
+                    recent.append(source)
+                }
+            }
+
+            var others = fetchedSources.filter { !recentIDSet.contains($0.id) }
+            others.sort {
                 $0.githubRepo.repo.lowercased() < $1.githubRepo.repo.lowercased()
             }
+
+            self.recentSources = recent
+            self.otherSources = others
+
         } catch JulesAPIError.noAPIKey {
             errorMessage = "No API key found. Please add one in Settings."
         } catch {
@@ -159,15 +199,16 @@ struct HomeView: View {
 
 struct SourceRow: View {
     let source: Source
+    var isRecent: Bool = false
 
     var body: some View {
         HStack(spacing: 16) {
             // Icon
-            Image(systemName: "network")
+            Image(systemName: isRecent ? "arrow.counterclockwise" : "network")
                 .font(.title)
-                .foregroundColor(.green)
+                .foregroundColor(isRecent ? .yellow : .green)
                 .padding(12)
-                .background(Color.green.opacity(0.2))
+                .background((isRecent ? Color.yellow : Color.green).opacity(0.2))
                 .cornerRadius(8)
 
             Text("\(source.githubRepo.owner)/\(source.githubRepo.repo)")
