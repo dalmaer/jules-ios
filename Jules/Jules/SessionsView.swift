@@ -171,14 +171,30 @@ struct SessionRow: View {
                 .background(Color(red: 0.2, green: 0.18, blue: 0.28))
                 .cornerRadius(12)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(session.title ?? session.name)
+            VStack(alignment: .leading, spacing: 6) {
+                Text(session.title ?? "Untitled Session")
                     .font(.headline)
                     .foregroundColor(.white)
+                    .lineLimit(2)
 
-                Text(session.name)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
+                HStack(spacing: 8) {
+                    if let state = session.state {
+                        Text(state.capitalized)
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(statusColor(for: state).opacity(0.2))
+                            .foregroundColor(statusColor(for: state))
+                            .cornerRadius(8)
+                    }
+
+                    if let updateTime = session.updateTime {
+                        Text("Updated \(formattedDate(from: updateTime))")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                }
             }
 
             Spacer()
@@ -191,6 +207,30 @@ struct SessionRow: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(red: 0.15, green: 0.15, blue: 0.2))
         )
+    }
+
+    private func formattedDate(from dateString: String) -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = formatter.date(from: dateString) {
+            let relativeFormatter = RelativeDateTimeFormatter()
+            relativeFormatter.unitsStyle = .abbreviated
+            return relativeFormatter.localizedString(for: date, relativeTo: Date())
+        }
+        return "recently"
+    }
+
+    private func statusColor(for state: String) -> Color {
+        switch state.uppercased() {
+        case "COMPLETED":
+            return .green
+        case "RUNNING", "ACTIVE":
+            return .yellow
+        case "FAILED":
+return .red
+        default:
+            return .gray
+        }
     }
 }
 
