@@ -179,7 +179,7 @@ struct SessionRow: View {
 
                 HStack(spacing: 8) {
                     if let state = session.state {
-                        Text(state.capitalized)
+                        Text(formattedState(from: state))
                             .font(.caption)
                             .fontWeight(.bold)
                             .padding(.horizontal, 8)
@@ -209,6 +209,10 @@ struct SessionRow: View {
         )
     }
 
+    private func formattedState(from state: String) -> String {
+        return state.replacingOccurrences(of: "_", with: " ").capitalized
+    }
+
     private func formattedDate(from dateString: String) -> String {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
@@ -224,7 +228,7 @@ struct SessionRow: View {
         switch state.uppercased() {
         case "COMPLETED":
             return .green
-        case "RUNNING", "ACTIVE":
+        case "IN_PROGRESS", "RUNNING", "ACTIVE":
             return .yellow
         case "FAILED":
 return .red
