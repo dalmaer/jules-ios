@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Jules - Homescreen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#8A2BE2", // A vibrant purple inspired by the screenshot
+                        "background-light": "#F3F4F6",
+                        "background-dark": "#1F0A3B",
+                        "surface-dark": "#2D1B4A",
+                        "surface-light": "#FFFFFF",
+                        "accent-pink": "#FF69B4",
+                        "accent-green": "#39FF14",
+                        "accent-yellow": "#FFFF00",
+                    },
+                    fontFamily: {
+                        display: ["Space Mono", "monospace"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark font-display text-white antialiased">
+<div class="flex flex-col h-screen">
+<header class="p-4 flex justify-between items-center border-b border-surface-dark/50">
+<div class="flex items-center space-x-2">
+<img alt="Jules logo" class="h-8 w-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFRfQ7jdBfHk883_5BiwDqVD6z89QSYM4b-U_MjBIPN8n1TRAqVMyKnS2cSl6EYc32qm5PZse3Ah9aaHdY4Whve_uAptmaKP1FwA4Zk7f4yv12R6l1QZUfLSIPjeLsKBwwnvMCLngaeFfWK_qAs9zRdXXt8z0mZibhhxe6-FIBrMGSe7gjfmeQCalG1A-wuV7VEsMYMoxryt-6LTzna4qMVShdXD0sPaqB40JPmdlvz5cm19F2DuqDe8_aqf1Mx5i1S2QGH079OjU"/>
+<h1 class="text-2xl font-bold">Jules</h1>
+</div>
+<button class="p-2">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<main class="flex-grow p-4 overflow-y-auto">
+<h2 class="text-lg text-gray-400 mb-4">Connected Sources</h2>
+<div class="space-y-3">
+<a class="block bg-surface-dark p-4 rounded-lg shadow-lg hover:bg-primary/30 transition-colors duration-200" href="#">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-accent-green" style="font-size: 32px;">hub</span>
+<div>
+<h3 class="font-bold text-white">Boba-App</h3>
+<p class="text-sm text-gray-400">A delicious boba ordering application.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-500">chevron_right</span>
+</div>
+</a>
+<a class="block bg-surface-dark p-4 rounded-lg shadow-lg hover:bg-primary/30 transition-colors duration-200" href="#">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-accent-green" style="font-size: 32px;">hub</span>
+<div>
+<h3 class="font-bold text-white">jules-ios-client</h3>
+<p class="text-sm text-gray-400">The very app you're using right now.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-500">chevron_right</span>
+</div>
+</a>
+<a class="block bg-surface-dark p-4 rounded-lg shadow-lg hover:bg-primary/30 transition-colors duration-200" href="#">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-accent-green" style="font-size: 32px;">hub</span>
+<div>
+<h3 class="font-bold text-white">Project-Phoenix</h3>
+<p class="text-sm text-gray-400">Next-gen web framework.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-500">chevron_right</span>
+</div>
+</a>
+<a class="block bg-surface-dark p-4 rounded-lg shadow-lg hover:bg-primary/30 transition-colors duration-200" href="#">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-accent-green" style="font-size: 32px;">hub</span>
+<div>
+<h3 class="font-bold text-white">dotfiles</h3>
+<p class="text-sm text-gray-400">Personal configuration files.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-500">chevron_right</span>
+</div>
+</a>
+</div>
+</main>
+<footer class="p-4 border-t border-surface-dark/50">
+<button class="w-full flex items-center justify-center space-x-2 bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-primary/80 transition-colors duration-200">
+<span class="material-symbols-outlined">add_circle</span>
+<span>CONNECT NEW SOURCE</span>
+</button>
+</footer>
+</div>
+
+</body></html>
