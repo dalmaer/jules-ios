@@ -215,7 +215,7 @@ struct ProgressUpdatedView: View {
             if let description = progressUpdated.description,
                !description.isEmpty,
                description != progressUpdated.title {
-                Text(description)
+                Text(LocalizedStringKey(description))
                     .font(.body)
                     .foregroundColor(.gray)
                     .padding(.top, 2)
