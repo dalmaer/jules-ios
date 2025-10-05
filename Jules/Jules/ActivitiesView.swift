@@ -66,7 +66,7 @@ struct ActivitiesView: View {
                     ScrollView {
                         VStack(spacing: 12) {
                             ForEach(activities) { activity in
-                                ActivityRow(activity: activity)
+                                ActivityRow(activity: activity, isUserMessage: isUserMessage(activity: activity))
                             }
                         }
                         .padding()
@@ -114,21 +114,34 @@ struct ActivitiesView: View {
         errorMessage = nil
 
         do {
-            activities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)
+            let newActivities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)
+
+            // Check if there are new activities and if the latest one is from the agent
+            if let latestActivity = newActivities.first,
+               !activities.contains(where: { $0.id == latestActivity.id }),
+               !isUserMessage(activity: latestActivity) {
+                NotificationManager.shared.scheduleNotification(
+                    title: "New Message from Agent",
+                    body: latestActivity.content
+                )
+            }
+
+            activities = newActivities
         } catch {
             errorMessage = "Failed to load activities: \(error.localizedDescription)"
         }
 
         isLoading = false
     }
+
+    private func isUserMessage(activity: Activity) -> Bool {
+        activity.type.lowercased().contains("user") || activity.type == "message"
+    }
 }
 
 struct ActivityRow: View {
     let activity: Activity
-
-    var isUserMessage: Bool {
-        activity.type.lowercased().contains("user") || activity.type == "message"
-    }
+    let isUserMessage: Bool
 
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
