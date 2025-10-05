@@ -202,7 +202,7 @@ struct SourceRow: View {
     var isRecent: Bool = false
 
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(alignment: .center, spacing: 16) {
             // Icon
             Image(systemName: isRecent ? "arrow.counterclockwise" : "network")
                 .font(.title)
@@ -211,12 +211,13 @@ struct SourceRow: View {
                 .background((isRecent ? Color.yellow : Color.green).opacity(0.2))
                 .cornerRadius(8)
 
-            Text("\(source.githubRepo.owner)/\(source.githubRepo.repo)")
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            Spacer()
+            VStack(alignment: .leading, spacing: 0) {
+                Text("\(source.githubRepo.owner)/\(source.githubRepo.repo)")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             Image(systemName: "chevron.right")
                 .foregroundColor(.gray)
