@@ -16,6 +16,13 @@ struct Source: Codable, Identifiable, Hashable {
     struct GitHubRepo: Codable, Hashable {
         let owner: String
         let repo: String
+        let isPrivate: Bool?
+        let defaultBranch: Branch?
+        let branches: [Branch]?
+    }
+
+    struct Branch: Codable, Hashable {
+        let displayName: String
     }
 }
 
@@ -24,6 +31,10 @@ struct Session: Codable, Identifiable, Hashable {
     let id: String
     let name: String
     let title: String?
+    let createTime: String?
+    let updateTime: String?
+    let state: String?
+    let url: String?
     let sourceContext: SourceContext?
     let prompt: String?
     let requirePlanApproval: Bool?

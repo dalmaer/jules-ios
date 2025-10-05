@@ -168,203 +168,188 @@ struct ActivitiesView: View {
     }
 }
 
-struct ActivityRow: View {
-    let activity: Activity
+// MARK: - Activity Content Views
 
-    var isUserMessage: Bool {
-        activity.originator?.lowercased() == "user"
-    }
+struct PlanGeneratedView: View {
+    let planGenerated: Activity.PlanGenerated
 
-    var displayContent: String {
-        // Check for plan generated
-        if let planGen = activity.planGenerated, let plan = planGen.plan, let steps = plan.steps {
-            return steps.enumerated().map { index, step in
-                let num = step.index ?? index
-                return "\(num + 1). \(step.title ?? "Step \(num + 1)")"
-            }.joined(separator: "\n\n")
-        }
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("I have a plan:")
+                .font(.headline)
+                .foregroundColor(.white)
 
-        // Check for plan approved
-        if activity.planApproved != nil {
-            return "Plan approved by user"
-        }
-
-        // Check for progress update
-        if let progress = activity.progressUpdated {
-            if let description = progress.description, !description.isEmpty {
-                return description
-            }
-            if let title = progress.title, !title.isEmpty {
-                return title
+            if let plan = planGenerated.plan, let steps = plan.steps {
+                ForEach(steps.sorted(by: { ($0.index ?? 0) < ($1.index ?? 0) }), id: \.self) { step in
+                    HStack(alignment: .top, spacing: 8) {
+                        Text("\(step.index.map { String($0 + 1) } ?? "•").")
+                            .fontWeight(.bold)
+                            .foregroundColor(.purple)
+                        Text(step.title ?? "Unnamed step")
+                            .foregroundColor(.white)
+                    }
+                }
             }
         }
+    }
+}
 
-        // Check for session completion
-        if activity.sessionCompleted != nil {
-            // Get commit message from artifacts if available
-            if let commitMsg = activity.artifacts?.first?.changeSet?.gitPatch?.suggestedCommitMessage {
-                return commitMsg
+struct PlanApprovedView: View {
+    var body: some View {
+        Text("Plan approved.")
+            .font(.body)
+            .foregroundColor(.green)
+    }
+}
+
+struct ProgressUpdatedView: View {
+    let progressUpdated: Activity.ProgressUpdated
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if let title = progressUpdated.title, !title.isEmpty {
+                Text(title)
+                    .font(.headline)
+                    .foregroundColor(.white)
             }
-            return "Session completed"
-        }
-
-        // Check for code changes
-        if let artifact = activity.artifacts?.first,
-           let changeSet = artifact.changeSet,
-           let gitPatch = changeSet.gitPatch {
-            if let commitMsg = gitPatch.suggestedCommitMessage, !commitMsg.isEmpty {
-                return commitMsg
+            if let description = progressUpdated.description,
+               !description.isEmpty,
+               description != progressUpdated.title {
+                Text(description)
+                    .font(.body)
+                    .foregroundColor(.gray)
+                    .padding(.top, 2)
             }
-            // Show a summary of changes
-            let patch = gitPatch.unidiffPatch ?? ""
-            let lines = patch.components(separatedBy: "\n")
-            let additions = lines.filter { $0.hasPrefix("+") && !$0.hasPrefix("+++") }.count
-            let deletions = lines.filter { $0.hasPrefix("-") && !$0.hasPrefix("---") }.count
-            return "Code changes: +\(additions) -\(deletions) lines"
         }
-
-        // Fallback to name
-        return activity.name
     }
+}
 
-    var displayTime: String {
-        let timeString = activity.createTime ?? ""
-        return formatRelativeTime(timeString)
-    }
-
-    var activityType: String? {
-        if activity.planGenerated != nil {
-            return "Plan"
-        }
-
-        if activity.planApproved != nil {
-            return "Plan Approved"
-        }
-
-        if activity.sessionCompleted != nil {
-            return "Completed"
-        }
-
-        if activity.progressUpdated != nil {
-            return "Progress"
-        }
-
-        if activity.artifacts != nil {
-            return "Code Change"
-        }
-
-        if let originator = activity.originator {
-            return originator.capitalized
-        }
-
-        return nil
-    }
-
-    func formatRelativeTime(_ isoString: String) -> String {
-        guard !isoString.isEmpty else { return "" }
-
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-
-        guard let date = formatter.date(from: isoString) else {
-            // Try without fractional seconds
-            formatter.formatOptions = [.withInternetDateTime]
-            guard let date = formatter.date(from: isoString) else {
-                return isoString
-            }
-            return formatDate(date)
-        }
-
-        return formatDate(date)
-    }
-
-    func formatDate(_ date: Date) -> String {
-        let now = Date()
-        let interval = now.timeIntervalSince(date)
-
-        // Less than a minute
-        if interval < 60 {
-            return "just now"
-        }
-
-        // Less than an hour
-        if interval < 3600 {
-            let mins = Int(interval / 60)
-            return "\(mins) min\(mins == 1 ? "" : "s") ago"
-        }
-
-        // Less than a day
-        if interval < 86400 {
-            let hours = Int(interval / 3600)
-            return "\(hours) hour\(hours == 1 ? "" : "s") ago"
-        }
-
-        // Less than a week
-        if interval < 604800 {
-            let days = Int(interval / 86400)
-            return "\(days) day\(days == 1 ? "" : "s") ago"
-        }
-
-        // Format as "14:42 on January 6th, 1976"
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "HH:mm"
-        let time = timeFormatter.string(from: date)
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM d"
-        let dateStr = dateFormatter.string(from: date)
-
-        let calendar = Calendar.current
-        let day = calendar.component(.day, from: date)
-        let suffix: String
-        switch day {
-        case 1, 21, 31: suffix = "st"
-        case 2, 22: suffix = "nd"
-        case 3, 23: suffix = "rd"
-        default: suffix = "th"
-        }
-
-        let yearFormatter = DateFormatter()
-        yearFormatter.dateFormat = "yyyy"
-        let year = yearFormatter.string(from: date)
-
-        return "\(time) on \(dateStr)\(suffix), \(year)"
-    }
+struct SessionCompletedView: View {
+    let artifacts: [Activity.Artifact]?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .top, spacing: 12) {
-                // Icon
-                Image(systemName: isUserMessage ? "person.fill" : "cpu.fill")
-                    .font(.title3)
-                    .foregroundColor(.white)
-                    .padding(12)
-                    .background(Color(red: 0.2, green: 0.18, blue: 0.28))
-                    .cornerRadius(10)
+            Text("Session Completed")
+                .font(.headline)
+                .foregroundColor(.green)
 
-                VStack(alignment: .leading, spacing: 6) {
-                    // Activity type if available
-                    if let type = activityType, !type.isEmpty {
-                        Text(type.replacingOccurrences(of: "_", with: " ").capitalized)
+            if let commitMsg = artifacts?.first?.changeSet?.gitPatch?.suggestedCommitMessage {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Suggested Commit Message:")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    Text(commitMsg)
+                        .font(.body.monospaced())
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.black.opacity(0.3))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                        )
+                }
+            }
+        }
+    }
+}
+
+struct CodeChangeView: View {
+    let artifacts: [Activity.Artifact]
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            ForEach(artifacts, id: \.self) { artifact in
+                if let changeSet = artifact.changeSet, let gitPatch = changeSet.gitPatch {
+                    VStack(alignment: .leading) {
+                        if let commitMsg = gitPatch.suggestedCommitMessage, !commitMsg.isEmpty {
+                            Text(commitMsg)
+                                .font(.body)
+                                .foregroundColor(.white)
+                        } else if let patch = gitPatch.unidiffPatch {
+                            let lines = patch.components(separatedBy: "\n")
+                            let additions = lines.filter { $0.hasPrefix("+") && !$0.hasPrefix("+++") }.count
+                            let deletions = lines.filter { $0.hasPrefix("-") && !$0.hasPrefix("---") }.count
+                            Text("Code changed: +\(additions) insertions, -\(deletions) deletions")
+                                .font(.body)
+                                .foregroundColor(.white)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct FallbackActivityView: View {
+    let activity: Activity
+
+    var body: some View {
+        Text(activity.name)
+            .font(.body)
+            .foregroundColor(.white)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+
+// MARK: - ActivityRow (Dispatcher)
+
+struct ActivityRow: View {
+    let activity: Activity
+
+    private var isUserMessage: Bool {
+        activity.originator?.lowercased() == "user"
+    }
+
+    private var activityType: String? {
+        if activity.planGenerated != nil { return "Plan" }
+        if activity.planApproved != nil { return "Plan Approved" }
+        if activity.sessionCompleted != nil { return "Completed" }
+        if activity.progressUpdated != nil { return "Progress" }
+        if let artifacts = activity.artifacts, !artifacts.isEmpty { return "Code Change" }
+        if let originator = activity.originator { return originator.capitalized }
+        return nil
+    }
+
+    private var displayTime: String {
+        formatRelativeTime(activity.createTime ?? "")
+    }
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            // Icon
+            Image(systemName: isUserMessage ? "person.fill" : "cpu.fill")
+                .font(.title3)
+                .foregroundColor(.white)
+                .padding(12)
+                .background(Color(red: 0.2, green: 0.18, blue: 0.28))
+                .cornerRadius(10)
+
+            VStack(alignment: .leading, spacing: 8) {
+                // Header: Type and Time
+                HStack {
+                    if let type = activityType {
+                        Text(type)
                             .font(.caption)
+                            .fontWeight(.medium)
                             .foregroundColor(.purple)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
                             .background(Color.purple.opacity(0.2))
                             .cornerRadius(6)
                     }
-
-                    Text(displayContent)
-                        .font(.body)
-                        .foregroundColor(.white)
-                        .fixedSize(horizontal: false, vertical: true)
-
+                    Spacer()
                     if !displayTime.isEmpty {
                         Text(displayTime)
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
                 }
+
+                // Content View
+                activityContentView()
+                    .padding(.top, 4)
             }
         }
         .padding()
@@ -372,6 +357,44 @@ struct ActivityRow: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(red: 0.15, green: 0.15, blue: 0.2))
         )
+    }
+
+    @ViewBuilder
+    private func activityContentView() -> some View {
+        if let planGen = activity.planGenerated {
+            PlanGeneratedView(planGenerated: planGen)
+        } else if activity.planApproved != nil {
+            PlanApprovedView()
+        } else if let progress = activity.progressUpdated {
+            ProgressUpdatedView(progressUpdated: progress)
+        } else if activity.sessionCompleted != nil {
+            SessionCompletedView(artifacts: activity.artifacts)
+        } else if let artifacts = activity.artifacts, !artifacts.isEmpty {
+            CodeChangeView(artifacts: artifacts)
+        } else {
+            FallbackActivityView(activity: activity)
+        }
+    }
+
+    private func formatRelativeTime(_ isoString: String) -> String {
+        guard !isoString.isEmpty else { return "just now" }
+
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        let date: Date?
+        if let d = formatter.date(from: isoString) {
+            date = d
+        } else {
+            formatter.formatOptions = [.withInternetDateTime]
+            date = formatter.date(from: isoString)
+        }
+
+        guard let validDate = date else { return "a while ago" }
+
+        let relativeFormatter = RelativeDateTimeFormatter()
+        relativeFormatter.unitsStyle = .full
+        return relativeFormatter.localizedString(for: validDate, relativeTo: Date())
     }
 }
 
