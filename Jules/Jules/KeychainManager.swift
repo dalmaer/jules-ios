@@ -12,6 +12,7 @@ class KeychainManager {
     static let shared = KeychainManager()
     private let service = "com.jules.ios"
     private let apiKeyAccount = "julesAPIKey"
+    private let queue = DispatchQueue(label: "com.jules.keychain", qos: .userInitiated)
 
     private init() {}
 
@@ -69,6 +70,15 @@ class KeychainManager {
 
     // MARK: - Check if API Key exists
     func hasAPIKey() -> Bool {
-        return getAPIKey() != nil
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: apiKeyAccount,
+            kSecReturnData as String: false,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+
+        let status = SecItemCopyMatching(query as CFDictionary, nil)
+        return status == errSecSuccess
     }
 }

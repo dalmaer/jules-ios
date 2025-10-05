@@ -22,14 +22,12 @@ struct SessionsView: View {
 
             VStack(spacing: 0) {
                 // Header
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Sessions")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
+                Text("Sessions")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
 
                 // Content
                 if isLoading {
@@ -106,7 +104,6 @@ struct SessionsView: View {
                 .padding()
             }
         }
-        .navigationTitle("Source")
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: Session.self) { session in
             ActivitiesView(session: session)
@@ -126,9 +123,33 @@ struct SessionsView: View {
         errorMessage = nil
 
         do {
+            // Fetch all sessions and filter client-side for this source
+            // The API may not support server-side filtering in alpha
             let allSessions = try await JulesAPIClient.shared.fetchSessions()
-            // Filter sessions for this source
-            sessions = allSessions.filter { $0.sourceContext.source.contains(source.id) }
+
+            // Filter sessions that belong to this source
+            // The sourceContext.source field should contain the source identifier
+            sessions = allSessions.filter { session in
+                guard let sourceContext = session.sourceContext else { return false }
+                return sourceContext.source == source.name ||
+                       sourceContext.source == source.id ||
+                       sourceContext.source.contains(source.githubRepo.repo)
+            }
+        } catch let apiError as JulesAPIError {
+            switch apiError {
+            case .noAPIKey:
+                errorMessage = "No API key found"
+            case .invalidURL:
+                errorMessage = "Invalid URL"
+            case .httpError(let code):
+                errorMessage = "HTTP error \(code) loading sessions"
+            case .decodingError(let error):
+                errorMessage = "Failed to decode sessions: \(error.localizedDescription)"
+            case .networkError(let error):
+                errorMessage = "Network error: \(error.localizedDescription)"
+            case .invalidResponse:
+                errorMessage = "Invalid response from server"
+            }
         } catch {
             errorMessage = "Failed to load sessions: \(error.localizedDescription)"
         }
@@ -151,7 +172,7 @@ struct SessionRow: View {
                 .cornerRadius(12)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(session.title)
+                Text(session.title ?? session.name)
                     .font(.headline)
                     .foregroundColor(.white)
 
@@ -292,12 +313,12 @@ struct CreateSessionSheet: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        SessionsView(source: Source(
-            id: "123",
-            name: "Test Source",
-            githubRepo: Source.GitHubRepo(owner: "test", repo: "repo")
-        ))
-    }
-}
+// #Preview {
+//     NavigationStack {
+//         SessionsView(source: Source(
+//             id: "123",
+//             name: "Test Source",
+//             githubRepo: Source.GitHubRepo(owner: "test", repo: "repo")
+//         ))
+//     }
+// }

@@ -1,0 +1,55 @@
+========== API REQUEST ==========
+URL: https://jules.googleapis.com/v1alpha/sessions?pageSize=50
+Method: GET
+Headers:
+  Content-Type: application/json
+  X-Goog-Api-Key: [REDACTED]
+=================================
+
+
+========== API RESPONSE ==========
+Status Code: 200
+Response Size: 1699 bytes
+Response Body:
+{
+  "sessions": [
+    {
+      "name": "sessions/7020784978948753357",
+      "title": "Could you explore a plan to add notifications to this iOS app?\n\nThe notifications that I want are when something asynchronous is complete such as an activitiy.",
+      "createTime": "2025-10-05T01:08:39.160026463Z",
+      "updateTime": "2025-10-05T01:33:01.416528Z",
+      "state": "COMPLETED",
+      "sourceContext": {
+        "source": "sources/github/dalmaer/jules-ios",
+        "githubRepoContext": {
+          "startingBranch": "main"
+        }
+      },
+      "prompt": "Could you explore a plan to add notifications to this iOS app?\n\nThe notifications that I want are when something asynchronous is complete such as an activitiy.",
+      "url": "https://jules.google.com/session/7020784978948753357",
+      "id": "7020784978948753357"
+    },
+    {
+      "name": "sessions/12682892832654516287",
+      "title": "Add the Google Vertex AI model endpoint",
+      "createTime": "2025-08-05T20:42:49.272584508Z",
+      "state": "COMPLETED",
+      "prompt": "Add the Google Vertex AI model endpoint",
+      "url": "https://jules.google.com/session/12682892832654516287",
+      "id": "12682892832654516287"
+    },
+    {
+      "name": "sessions/523962072736574146",
+      "title": "Take a look at issue #1 (https://github.com/dalmaer/parade/issues/1) and build a plan for how to solve it.",
+      "createTime": "2025-05-21T19:02:23.281091484Z",
+      "state": "COMPLETED",
+      "prompt": "Take a look at issue #1 (https://github.com/dalmaer/parade/issues/1) and build a plan for how to solve it.",
+      "url": "https://jules.google.com/session/523962072736574146",
+      "id": "523962072736574146"
+    }
+  ]
+}
+
+==================================
+
+

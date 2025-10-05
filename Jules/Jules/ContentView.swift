@@ -12,7 +12,7 @@ struct ContentView: View {
 
     var body: some View {
         HomeView()
-            .onAppear {
+            .task {
                 // Check if API key exists on first launch
                 if !KeychainManager.shared.hasAPIKey() {
                     showAPIKeyPrompt = true

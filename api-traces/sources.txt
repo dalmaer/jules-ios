@@ -1,0 +1,587 @@
+========== API REQUEST ==========
+URL: https://jules.googleapis.com/v1alpha/sources
+Method: GET
+Headers:
+  Content-Type: application/json
+  X-Goog-Api-Key: [REDACTED]
+=================================
+
+========== API RESPONSE ==========
+Status Code: 200
+Response Size: 13106 bytes
+Response Body:
+{
+  "sources": [
+    {
+      "name": "sources/github/dalmaer/16ate",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "16ate",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/16ate"
+    },
+    {
+      "name": "sources/github/dalmaer/WebFundamentals",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "WebFundamentals",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "InputCaps"
+          },
+          {
+            "displayName": "custom-prop-formatting"
+          },
+          {
+            "displayName": "custom-props-backstory"
+          },
+          {
+            "displayName": "cwilso-audio"
+          },
+          {
+            "displayName": "dep-rem-updates"
+          },
+          {
+            "displayName": "devtools-digest-7-fixes"
+          },
+          {
+            "displayName": "devtools-homepage-update"
+          },
+          {
+            "displayName": "feed-fix"
+          },
+          {
+            "displayName": "jekyll-three"
+          },
+          {
+            "displayName": "jpmedley-patch-1"
+          },
+          {
+            "displayName": "manifest"
+          },
+          {
+            "displayName": "master"
+          },
+          {
+            "displayName": "navtest"
+          },
+          {
+            "displayName": "patch-1"
+          },
+          {
+            "displayName": "patch-2"
+          },
+          {
+            "displayName": "refactor"
+          },
+          {
+            "displayName": "var-update"
+          },
+          {
+            "displayName": "webUsb"
+          },
+          {
+            "displayName": "yt-player-tweaks"
+          }
+        ]
+      },
+      "id": "github/dalmaer/WebFundamentals"
+    },
+    {
+      "name": "sources/github/dalmaer/abe",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "abe",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/abe"
+    },
+    {
+      "name": "sources/github/dalmaer/ai-native-dev-landscape",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "ai-native-dev-landscape",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          },
+          {
+            "displayName": "remove-dsstore"
+          }
+        ]
+      },
+      "id": "github/dalmaer/ai-native-dev-landscape"
+    },
+    {
+      "name": "sources/github/dalmaer/almaer-com-home-page",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "almaer-com-home-page",
+        "isPrivate": true,
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/almaer-com-home-page"
+    },
+    {
+      "name": "sources/github/dalmaer/bespin-basic",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "bespin-basic",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/bespin-basic"
+    },
+    {
+      "name": "sources/github/dalmaer/capybota",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "capybota",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/capybota"
+    },
+    {
+      "name": "sources/github/dalmaer/chatgpt-plugin-detector",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "chatgpt-plugin-detector",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/chatgpt-plugin-detector"
+    },
+    {
+      "name": "sources/github/dalmaer/chrome-speaktosite",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "chrome-speaktosite",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/chrome-speaktosite"
+    },
+    {
+      "name": "sources/github/dalmaer/chrome-winsize",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "chrome-winsize",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/chrome-winsize"
+    },
+    {
+      "name": "sources/github/dalmaer/cleanshot",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "cleanshot",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/cleanshot"
+    },
+    {
+      "name": "sources/github/dalmaer/cls-chrome-extension",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "cls-chrome-extension",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/cls-chrome-extension"
+    },
+    {
+      "name": "sources/github/dalmaer/course-accessible-cross-browser-forms",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "course-accessible-cross-browser-forms",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/course-accessible-cross-browser-forms"
+    },
+    {
+      "name": "sources/github/dalmaer/devtools-angels",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "devtools-angels",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/devtools-angels"
+    },
+    {
+      "name": "sources/github/dalmaer/die-printlayout-die",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "die-printlayout-die",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/die-printlayout-die"
+    },
+    {
+      "name": "sources/github/dalmaer/dinner-picker",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "dinner-picker",
+        "isPrivate": true,
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/dinner-picker"
+    },
+    {
+      "name": "sources/github/dalmaer/fcp-chrome-extension",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "fcp-chrome-extension",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/fcp-chrome-extension"
+    },
+    {
+      "name": "sources/github/dalmaer/fid-chrome-extension",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "fid-chrome-extension",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/fid-chrome-extension"
+    },
+    {
+      "name": "sources/github/dalmaer/glaser",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "glaser",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/glaser"
+    },
+    {
+      "name": "sources/github/dalmaer/glowstick",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "glowstick",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          },
+          {
+            "displayName": "patch-1"
+          }
+        ]
+      },
+      "id": "github/dalmaer/glowstick"
+    },
+    {
+      "name": "sources/github/dalmaer/haiku",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "haiku",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/haiku"
+    },
+    {
+      "name": "sources/github/dalmaer/helium-css",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "helium-css",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/helium-css"
+    },
+    {
+      "name": "sources/github/dalmaer/how-old",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "how-old",
+        "isPrivate": true,
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/how-old"
+    },
+    {
+      "name": "sources/github/dalmaer/imgmv",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "imgmv",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/imgmv"
+    },
+    {
+      "name": "sources/github/dalmaer/important-dates",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "important-dates",
+        "isPrivate": true,
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/important-dates"
+    },
+    {
+      "name": "sources/github/dalmaer/jules-ios",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "jules-ios",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          }
+        ]
+      },
+      "id": "github/dalmaer/jules-ios"
+    },
+    {
+      "name": "sources/github/dalmaer/lab",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "lab",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          },
+          {
+            "displayName": "patch-1"
+          }
+        ]
+      },
+      "id": "github/dalmaer/lab"
+    },
+    {
+      "name": "sources/github/dalmaer/lcp-chrome-extension",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "lcp-chrome-extension",
+        "defaultBranch": {
+          "displayName": "master"
+        },
+        "branches": [
+          {
+            "displayName": "master"
+          }
+        ]
+      },
+      "id": "github/dalmaer/lcp-chrome-extension"
+    },
+    {
+      "name": "sources/github/dalmaer/otelbin",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "otelbin",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "174-generate-social-image-of-visualization-when-pasting-link-in-slackxlinkedin"
+          },
+          {
+            "displayName": "analytics"
+          },
+          {
+            "displayName": "change-validation-console-height"
+          },
+          {
+            "displayName": "env-var-interpolation"
+          },
+          {
+            "displayName": "main"
+          },
+          {
+            "displayName": "patch-1"
+          },
+          {
+            "displayName": "server-side-validation-marker"
+          }
+        ]
+      },
+      "id": "github/dalmaer/otelbin"
+    },
+    {
+      "name": "sources/github/dalmaer/palm-lite",
+      "githubRepo": {
+        "owner": "dalmaer",
+        "repo": "palm-lite",
+        "defaultBranch": {
+          "displayName": "main"
+        },
+        "branches": [
+          {
+            "displayName": "main"
+          },
+          {
+            "displayName": "patch-1"
+          }
+        ]
+      },
+      "id": "github/dalmaer/palm-lite"
+    }
+  ],
+  "nextPageToken": "github/dalmaer/palm-run"
+}
+
+==================================

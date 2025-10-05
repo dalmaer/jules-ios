@@ -52,14 +52,53 @@ class JulesAPIClient {
 
     private func performRequest<T: Decodable>(_ request: URLRequest) async throws -> T {
         do {
+            print("\n========== API REQUEST ==========")
+            print("URL: \(request.url?.absoluteString ?? "unknown")")
+            print("Method: \(request.httpMethod ?? "GET")")
+            print("Headers:")
+            request.allHTTPHeaderFields?.forEach { key, value in
+                // Mask the API key for security
+                if key == "X-Goog-Api-Key" {
+                    print("  \(key): [REDACTED]")
+                } else {
+                    print("  \(key): \(value)")
+                }
+            }
+            if let bodyData = request.httpBody, let bodyString = String(data: bodyData, encoding: .utf8) {
+                print("Request Body:")
+                print(bodyString)
+            }
+            print("=================================\n")
+
             let (data, response) = try await URLSession.shared.data(for: request)
 
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw JulesAPIError.invalidResponse
             }
 
+            print("\n========== API RESPONSE ==========")
+            print("Status Code: \(httpResponse.statusCode)")
+            print("Response Size: \(data.count) bytes")
+
             guard (200...299).contains(httpResponse.statusCode) else {
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Error Response Body:")
+                    print(responseString)
+                }
+                print("==================================\n")
                 throw JulesAPIError.httpError(httpResponse.statusCode)
+            }
+
+            // Print successful response
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Response Body:")
+                print(responseString)
+            }
+            print("==================================\n")
+
+            // Handle empty response
+            if data.isEmpty {
+                print("⚠️ Warning: Empty response received")
             }
 
             let decoder = JSONDecoder()
@@ -68,11 +107,20 @@ class JulesAPIClient {
             do {
                 return try decoder.decode(T.self, from: data)
             } catch {
+                print("\n========== DECODING ERROR ==========")
+                print("Error: \(error)")
+                if let decodingError = error as? DecodingError {
+                    print("Detailed: \(decodingError)")
+                }
+                print("====================================\n")
                 throw JulesAPIError.decodingError(error)
             }
         } catch let error as JulesAPIError {
             throw error
         } catch {
+            print("\n========== NETWORK ERROR ==========")
+            print("Error: \(error.localizedDescription)")
+            print("===================================\n")
             throw JulesAPIError.networkError(error)
         }
     }
@@ -85,8 +133,15 @@ class JulesAPIClient {
         return response.sources ?? []
     }
 
-    func fetchSessions(pageSize: Int = 50) async throws -> [Session] {
-        let request = try createRequest(path: "/sessions?pageSize=\(pageSize)")
+    func fetchSessions(pageSize: Int = 50, sourceId: String? = nil) async throws -> [Session] {
+        var path = "/sessions?pageSize=\(pageSize)"
+        if let sourceId = sourceId {
+            // URL encode the source parameter
+            if let encodedSource = sourceId.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                path += "&source=\(encodedSource)"
+            }
+        }
+        let request = try createRequest(path: path)
         let response: SessionsResponse = try await performRequest(request)
         return response.sessions ?? []
     }

@@ -22,12 +22,27 @@ struct HomeView: View {
                 VStack(spacing: 0) {
                     // Header
                     HStack {
-                        Image(systemName: "doc.text")
-                            .font(.title)
-                            .foregroundColor(.white)
-                            .padding(12)
-                            .background(Color.orange.opacity(0.3))
-                            .cornerRadius(8)
+                        // Jules logo placeholder - replace with actual logo image
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.purple.opacity(0.3))
+                                .frame(width: 60, height: 60)
+
+                            // Octopus-like shape to represent Jules logo
+                            VStack(spacing: 2) {
+                                Circle()
+                                    .fill(Color.purple)
+                                    .frame(width: 30, height: 30)
+                                HStack(spacing: 4) {
+                                    ForEach(0..<4) { _ in
+                                        Capsule()
+                                            .fill(Color.purple)
+                                            .frame(width: 6, height: 15)
+                                    }
+                                }
+                            }
+                            .padding(8)
+                        }
 
                         Text("Jules")
                             .font(.largeTitle)
@@ -53,9 +68,13 @@ struct HomeView: View {
 
                         if isLoading {
                             Spacer()
-                            ProgressView()
-                                .scaleEffect(1.5)
-                                .tint(.white)
+                            HStack {
+                                Spacer()
+                                ProgressView()
+                                    .scaleEffect(2.0)
+                                    .tint(.white)
+                                Spacer()
+                            }
                             Spacer()
                         } else if let error = errorMessage {
                             Spacer()
@@ -123,7 +142,11 @@ struct HomeView: View {
         errorMessage = nil
 
         do {
-            sources = try await JulesAPIClient.shared.fetchSources()
+            let fetchedSources = try await JulesAPIClient.shared.fetchSources()
+            // Sort sources by repository name
+            sources = fetchedSources.sorted {
+                $0.githubRepo.repo.lowercased() < $1.githubRepo.repo.lowercased()
+            }
         } catch JulesAPIError.noAPIKey {
             errorMessage = "No API key found. Please add one in Settings."
         } catch {
@@ -147,15 +170,10 @@ struct SourceRow: View {
                 .background(Color.green.opacity(0.2))
                 .cornerRadius(8)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(source.name)
-                    .font(.headline)
-                    .foregroundColor(.white)
-
-                Text("\(source.githubRepo.owner)/\(source.githubRepo.repo)")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
+            Text("\(source.githubRepo.owner)/\(source.githubRepo.repo)")
+                .font(.headline)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             Spacer()
 
@@ -170,6 +188,7 @@ struct SourceRow: View {
     }
 }
 
-#Preview {
-    HomeView()
-}
+// Preview disabled due to API key requirement
+// #Preview {
+//     HomeView()
+// }

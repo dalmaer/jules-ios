@@ -1,0 +1,208 @@
+Loading activities for session: 7020784978948753357
+Session name: sessions/7020784978948753357
+
+========== API REQUEST ==========
+URL: https://jules.googleapis.com/v1alpha/sessions/7020784978948753357/activities?pageSize=50
+Method: GET
+Headers:
+  Content-Type: application/json
+  X-Goog-Api-Key: [REDACTED]
+=================================
+
+
+========== API RESPONSE ==========
+Status Code: 200
+Response Size: 29649 bytes
+Response Body:
+{
+  "activities": [
+    {
+      "name": "sessions/7020784978948753357/activities/32daa72ac5e04af7b2e81bb7317bd2f9",
+      "createTime": "2025-10-05T01:10:07.616289Z",
+      "originator": "agent",
+      "planGenerated": {
+        "plan": {
+          "id": "d938f2889b8e4e1db90631bfcae2b4ba",
+          "steps": [
+            {
+              "id": "b13500a47667473ab7886213e810bcf1",
+              "title": "Create a `NotificationManager` class. This class will be responsible for handling all notification-related logic, including requesting user authorization and scheduling local notifications."
+            },
+            {
+              "id": "142943cd7a7f42f7a34df91deb49c211",
+              "title": "Request notification permissions. I'll add code to `JulesApp.swift` to request user permission for notifications when the app launches.",
+              "index": 1
+            },
+            {
+              "id": "dd64f9daa2d543c5a5918e1da301aa87",
+              "title": "Implement notification logic in `ActivitiesView.swift`. I'll modify the `loadActivities` function to detect when new messages from the agent arrive and trigger a local notification.",
+              "index": 2
+            },
+            {
+              "id": "666ceb13057d4ffb96c7b1e0afcedbdb",
+              "title": "Complete pre commit steps. Complete pre commit steps to make sure proper testing, verifications, reviews and reflections are done.",
+              "index": 3
+            },
+            {
+              "id": "87450ce7d12e44fea3b341333f9749dd",
+              "title": "Submit the change. Once the notification functionality is implemented and tested, I'll submit the changes with a descriptive commit message.",
+              "index": 4
+            }
+          ]
+        }
+      },
+      "id": "32daa72ac5e04af7b2e81bb7317bd2f9"
+    },
+    {
+      "name": "sessions/7020784978948753357/activities/task-7020784978948753357-activity-step-4276492755669796432",
+      "createTime": "2025-10-05T01:10:29.797588811Z",
+      "originator": "user",
+      "planApproved": {
+        "planId": "d938f2889b8e4e1db90631bfcae2b4ba"
+      },
+      "id": "task-7020784978948753357-activity-step-4276492755669796432"
+    },
+    {
+      "name": "sessions/7020784978948753357/activities/1dff500cc4c2491ea0aa4a8a551a5ff8",
+      "createTime": "2025-10-05T01:10:36.040799Z",
+      "originator": "user",
+      "planApproved": {
+        "planId": "d938f2889b8e4e1db90631bfcae2b4ba"
+      },
+      "id": "1dff500cc4c2491ea0aa4a8a551a5ff8"
+    },
+    {
+      "name": "sessions/7020784978948753357/activities/8fc2fae10dfa4d779b9296e277c3f56d",
+      "createTime": "2025-10-05T01:10:49.278688Z",
+      "originator": "agent",
+      "progressUpdated": {
+        "title": "I have created the `NotificationManager` class, which will handle all notific...",
+        "description": "I have created the `NotificationManager` class, which will handle all notification-related logic."
+      },
+      "artifacts": [
+        {
+          "changeSet": {
+            "source": "sources/github/dalmaer/jules-ios",
+            "gitPatch": {
+              "unidiffPatch": "diff --git a/Jules/Jules/NotificationManager.swift b/Jules/Jules/NotificationManager.swift\nnew file mode 100644\nindex 0000000..2b19389\n--- /dev/null\n+++ b/Jules/Jules/NotificationManager.swift\n@@ -0,0 +1,33 @@\n+import UserNotifications\n+\n+class NotificationManager {\n+    static let shared = NotificationManager()\n+    \n+    private init() {}\n+    \n+    func requestAuthorization() {\n+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in\n+            if granted {\n+                print(\"Notification authorization granted.\")\n+            } else if let error = error {\n+                print(\"Notification authorization error: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+    \n+    func scheduleNotification(title: String, body: String) {\n+        let content = UNMutableNotificationContent()\n+        content.title = title\n+        content.body = body\n+        content.sound = .default\n+        \n+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)\n+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)\n+        \n+        UNUserNotificationCenter.current().add(request) { error in\n+            if let error = error {\n+                print(\"Error scheduling notification: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+}\n\\ No newline at end of file\n",
+              "baseCommitId": "47348e519d31451e2ae830d9310e57bb7d809c06"
+            }
+          }
+        }
+      ],
+      "id": "8fc2fae10dfa4d779b9296e277c3f56d"
+    },
+    {
+      "name": "sessions/7020784978948753357/activities/71c49892fe66427da865c052f73678ef",
+      "createTime": "2025-10-05T01:11:15.787407Z",
+      "originator": "agent",
+      "progressUpdated": {
+        "title": "I have added code to `JulesApp.swift` to request notification permissions whe...",
+        "description": "I have added code to `JulesApp.swift` to request notification permissions when the app launches."
+      },
+      "artifacts": [
+        {
+          "changeSet": {
+            "source": "sources/github/dalmaer/jules-ios",
+            "gitPatch": {
+              "unidiffPatch": "diff --git a/Jules/Jules/JulesApp.swift b/Jules/Jules/JulesApp.swift\nindex 9db6c05..84474a3 100644\n--- a/Jules/Jules/JulesApp.swift\n+++ b/Jules/Jules/JulesApp.swift\n@@ -9,6 +9,10 @@ import SwiftUI\n \n @main\n struct JulesApp: App {\n+    init() {\n+        NotificationManager.shared.requestAuthorization()\n+    }\n+\n     var body: some Scene {\n         WindowGroup {\n             ContentView()\ndiff --git a/Jules/Jules/NotificationManager.swift b/Jules/Jules/NotificationManager.swift\nnew file mode 100644\nindex 0000000..2b19389\n--- /dev/null\n+++ b/Jules/Jules/NotificationManager.swift\n@@ -0,0 +1,33 @@\n+import UserNotifications\n+\n+class NotificationManager {\n+    static let shared = NotificationManager()\n+    \n+    private init() {}\n+    \n+    func requestAuthorization() {\n+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in\n+            if granted {\n+                print(\"Notification authorization granted.\")\n+            } else if let error = error {\n+                print(\"Notification authorization error: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+    \n+    func scheduleNotification(title: String, body: String) {\n+        let content = UNMutableNotificationContent()\n+        content.title = title\n+        content.body = body\n+        content.sound = .default\n+        \n+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)\n+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)\n+        \n+        UNUserNotificationCenter.current().add(request) { error in\n+            if let error = error {\n+                print(\"Error scheduling notification: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+}\n\\ No newline at end of file\n",
+              "baseCommitId": "47348e519d31451e2ae830d9310e57bb7d809c06"
+            }
+          }
+        }
+      ],
+      "id": "71c49892fe66427da865c052f73678ef"
+    },
+    {
+      "name": "sessions/7020784978948753357/activities/b7d169d788a543b3a4e9d81ad5ab4939",
+      "createTime": "2025-10-05T01:13:26.880536Z",
+      "originator": "agent",
+      "progressUpdated": {
+        "title": "I have implemented the notification logic in `ActivitiesView.swift`, which in...",
+        "description": "I have implemented the notification logic in `ActivitiesView.swift`, which includes detecting new agent messages and triggering local notifications. I also refactored the code to improve its quality."
+      },
+      "artifacts": [
+        {
+          "changeSet": {
+            "source": "sources/github/dalmaer/jules-ios",
+            "gitPatch": {
+              "unidiffPatch": "diff --git a/Jules/Jules/ActivitiesView.swift b/Jules/Jules/ActivitiesView.swift\nindex 94c4b6d..f4d9561 100644\n--- a/Jules/Jules/ActivitiesView.swift\n+++ b/Jules/Jules/ActivitiesView.swift\n@@ -66,7 +66,7 @@ struct ActivitiesView: View {\n                     ScrollView {\n                         VStack(spacing: 12) {\n                             ForEach(activities) { activity in\n-                                ActivityRow(activity: activity)\n+                                ActivityRow(activity: activity, isUserMessage: isUserMessage(activity: activity))\n                             }\n                         }\n                         .padding()\n@@ -114,21 +114,34 @@ struct ActivitiesView: View {\n         errorMessage = nil\n \n         do {\n-            activities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)\n+            let newActivities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)\n+\n+            // Check if there are new activities and if the latest one is from the agent\n+            if let latestActivity = newActivities.first,\n+               !activities.contains(where: { $0.id == latestActivity.id }),\n+               !isUserMessage(activity: latestActivity) {\n+                NotificationManager.shared.scheduleNotification(\n+                    title: \"New Message from Agent\",\n+                    body: latestActivity.content\n+                )\n+            }\n+\n+            activities = newActivities\n         } catch {\n             errorMessage = \"Failed to load activities: \\(error.localizedDescription)\"\n         }\n \n         isLoading = false\n     }\n+\n+    private func isUserMessage(activity: Activity) -\u003e Bool {\n+        activity.type.lowercased().contains(\"user\") || activity.type == \"message\"\n+    }\n }\n \n struct ActivityRow: View {\n     let activity: Activity\n-\n-    var isUserMessage: Bool {\n-        activity.type.lowercased().contains(\"user\") || activity.type == \"message\"\n-    }\n+    let isUserMessage: Bool\n \n     var body: some View {\n         HStack(alignment: .top, spacing: 16) {\ndiff --git a/Jules/Jules/JulesApp.swift b/Jules/Jules/JulesApp.swift\nindex 9db6c05..84474a3 100644\n--- a/Jules/Jules/JulesApp.swift\n+++ b/Jules/Jules/JulesApp.swift\n@@ -9,6 +9,10 @@ import SwiftUI\n \n @main\n struct JulesApp: App {\n+    init() {\n+        NotificationManager.shared.requestAuthorization()\n+    }\n+\n     var body: some Scene {\n         WindowGroup {\n             ContentView()\ndiff --git a/Jules/Jules/NotificationManager.swift b/Jules/Jules/NotificationManager.swift\nnew file mode 100644\nindex 0000000..2b19389\n--- /dev/null\n+++ b/Jules/Jules/NotificationManager.swift\n@@ -0,0 +1,33 @@\n+import UserNotifications\n+\n+class NotificationManager {\n+    static let shared = NotificationManager()\n+    \n+    private init() {}\n+    \n+    func requestAuthorization() {\n+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in\n+            if granted {\n+                print(\"Notification authorization granted.\")\n+            } else if let error = error {\n+                print(\"Notification authorization error: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+    \n+    func scheduleNotification(title: String, body: String) {\n+        let content = UNMutableNotificationContent()\n+        content.title = title\n+        content.body = body\n+        content.sound = .default\n+        \n+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)\n+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)\n+        \n+        UNUserNotificationCenter.current().add(request) { error in\n+            if let error = error {\n+                print(\"Error scheduling notification: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+}\n\\ No newline at end of file\n",
+              "baseCommitId": "47348e519d31451e2ae830d9310e57bb7d809c06"
+            }
+          }
+        }
+      ],
+      "id": "b7d169d788a543b3a4e9d81ad5ab4939"
+    },
+    {
+      "name": "sessions/7020784978948753357/activities/0df475c248a943828a04f633dfd22e5d",
+      "createTime": "2025-10-05T01:13:40.071167Z",
+      "originator": "agent",
+      "progressUpdated": {
+        "title": "Code reviewed",
+        "description": "### Final Rating: #Correct#\n\n**User's Goal:** The user wants to add local notifications to their iOS app. Specifically, they want a notification to appear when an asynchronous task, like receiving a new activity from an agent, is complete.\n\n**The Proposed Solution:** The agent implemented a `NotificationManager` singleton to handle requesting user permission for notifications and scheduling them. It then integrated this manager into the app's lifecycle and the view responsible for fetching activities.\n\n*   A new `NotificationManager.swift` file was created, containing a singleton class to manage notification permissions and scheduling.\n*   In `JulesApp.swift`, the `requestAuthorization()` method is called during app initialization to ask the user for permission to send notifications.\n*   In `ActivitiesView.swift`, after fetching new activities, the code checks if there is a new activity from the agent (not the user). If so, it calls `scheduleNotification()` to trigger a local notification with the content of the new activity.\n*   The `ActivityRow` was slightly refactored to accept an `isUserMessage` boolean, improving the separation of logic.\n\n**Critical Evaluation:**\n\n*   **Goal Achievement:** The patch successfully achieves the user's core goal. It adds the requested notification functionality, which triggers when a new asynchronous activity from the agent is fetched.\n*   **Completeness and Functionality:** The solution is complete and functional. It handles both requesting permissions and scheduling the notifications at the appropriate time. The logic correctly identifies new messages from the agent to prevent notifying the user about their own messages.\n*   **Correctness and Quality:** The code is correct and follows good practices for handling local notifications in SwiftUI. The creation of a dedicated `NotificationManager` is a clean architectural choice. The logic to check for new agent messages before sending a notification is sound. The refactoring in `ActivityRow` is a minor but positive improvement.\n*   **Scope:** The changes are entirely within the scope of the user's request. No unrelated code was added.\n*   **Security:** The patch does not contain any sensitive information.\n\nThe implementation is a solid, production-ready solution to the user's request."
+      },
+      "id": "0df475c248a943828a04f633dfd22e5d"
+    },
+    {
+      "name": "sessions/7020784978948753357/activities/2f38daae7bbd4c0988938ca0187abfaa",
+      "createTime": "2025-10-05T01:14:04.157370Z",
+      "originator": "agent",
+      "progressUpdated": {},
+      "artifacts": [
+        {
+          "changeSet": {
+            "source": "sources/github/dalmaer/jules-ios",
+            "gitPatch": {
+              "unidiffPatch": "diff --git a/Jules/Jules/ActivitiesView.swift b/Jules/Jules/ActivitiesView.swift\nindex 94c4b6d..f4d9561 100644\n--- a/Jules/Jules/ActivitiesView.swift\n+++ b/Jules/Jules/ActivitiesView.swift\n@@ -66,7 +66,7 @@ struct ActivitiesView: View {\n                     ScrollView {\n                         VStack(spacing: 12) {\n                             ForEach(activities) { activity in\n-                                ActivityRow(activity: activity)\n+                                ActivityRow(activity: activity, isUserMessage: isUserMessage(activity: activity))\n                             }\n                         }\n                         .padding()\n@@ -114,21 +114,34 @@ struct ActivitiesView: View {\n         errorMessage = nil\n \n         do {\n-            activities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)\n+            let newActivities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)\n+\n+            // Check if there are new activities and if the latest one is from the agent\n+            if let latestActivity = newActivities.first,\n+               !activities.contains(where: { $0.id == latestActivity.id }),\n+               !isUserMessage(activity: latestActivity) {\n+                NotificationManager.shared.scheduleNotification(\n+                    title: \"New Message from Agent\",\n+                    body: latestActivity.content\n+                )\n+            }\n+\n+            activities = newActivities\n         } catch {\n             errorMessage = \"Failed to load activities: \\(error.localizedDescription)\"\n         }\n \n         isLoading = false\n     }\n+\n+    private func isUserMessage(activity: Activity) -\u003e Bool {\n+        activity.type.lowercased().contains(\"user\") || activity.type == \"message\"\n+    }\n }\n \n struct ActivityRow: View {\n     let activity: Activity\n-\n-    var isUserMessage: Bool {\n-        activity.type.lowercased().contains(\"user\") || activity.type == \"message\"\n-    }\n+    let isUserMessage: Bool\n \n     var body: some View {\n         HStack(alignment: .top, spacing: 16) {\ndiff --git a/Jules/Jules/JulesApp.swift b/Jules/Jules/JulesApp.swift\nindex 9db6c05..84474a3 100644\n--- a/Jules/Jules/JulesApp.swift\n+++ b/Jules/Jules/JulesApp.swift\n@@ -9,6 +9,10 @@ import SwiftUI\n \n @main\n struct JulesApp: App {\n+    init() {\n+        NotificationManager.shared.requestAuthorization()\n+    }\n+\n     var body: some Scene {\n         WindowGroup {\n             ContentView()\ndiff --git a/Jules/Jules/NotificationManager.swift b/Jules/Jules/NotificationManager.swift\nnew file mode 100644\nindex 0000000..2b19389\n--- /dev/null\n+++ b/Jules/Jules/NotificationManager.swift\n@@ -0,0 +1,33 @@\n+import UserNotifications\n+\n+class NotificationManager {\n+    static let shared = NotificationManager()\n+    \n+    private init() {}\n+    \n+    func requestAuthorization() {\n+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in\n+            if granted {\n+                print(\"Notification authorization granted.\")\n+            } else if let error = error {\n+                print(\"Notification authorization error: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+    \n+    func scheduleNotification(title: String, body: String) {\n+        let content = UNMutableNotificationContent()\n+        content.title = title\n+        content.body = body\n+        content.sound = .default\n+        \n+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)\n+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)\n+        \n+        UNUserNotificationCenter.current().add(request) { error in\n+            if let error = error {\n+                print(\"Error scheduling notification: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+}\n\\ No newline at end of file\n",
+              "baseCommitId": "47348e519d31451e2ae830d9310e57bb7d809c06"
+            }
+          }
+        }
+      ],
+      "id": "2f38daae7bbd4c0988938ca0187abfaa"
+    },
+    {
+      "name": "sessions/7020784978948753357/activities/00633f80c6dd4172a83c35573c3d77f2",
+      "createTime": "2025-10-05T01:14:09.193943Z",
+      "originator": "agent",
+      "progressUpdated": {
+        "title": "I have completed all the pre-commit steps, including the code review and reco...",
+        "description": "I have completed all the pre-commit steps, including the code review and recording my learnings."
+      },
+      "artifacts": [
+        {
+          "changeSet": {
+            "source": "sources/github/dalmaer/jules-ios",
+            "gitPatch": {
+              "unidiffPatch": "diff --git a/Jules/Jules/ActivitiesView.swift b/Jules/Jules/ActivitiesView.swift\nindex 94c4b6d..f4d9561 100644\n--- a/Jules/Jules/ActivitiesView.swift\n+++ b/Jules/Jules/ActivitiesView.swift\n@@ -66,7 +66,7 @@ struct ActivitiesView: View {\n                     ScrollView {\n                         VStack(spacing: 12) {\n                             ForEach(activities) { activity in\n-                                ActivityRow(activity: activity)\n+                                ActivityRow(activity: activity, isUserMessage: isUserMessage(activity: activity))\n                             }\n                         }\n                         .padding()\n@@ -114,21 +114,34 @@ struct ActivitiesView: View {\n         errorMessage = nil\n \n         do {\n-            activities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)\n+            let newActivities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)\n+\n+            // Check if there are new activities and if the latest one is from the agent\n+            if let latestActivity = newActivities.first,\n+               !activities.contains(where: { $0.id == latestActivity.id }),\n+               !isUserMessage(activity: latestActivity) {\n+                NotificationManager.shared.scheduleNotification(\n+                    title: \"New Message from Agent\",\n+                    body: latestActivity.content\n+                )\n+            }\n+\n+            activities = newActivities\n         } catch {\n             errorMessage = \"Failed to load activities: \\(error.localizedDescription)\"\n         }\n \n         isLoading = false\n     }\n+\n+    private func isUserMessage(activity: Activity) -\u003e Bool {\n+        activity.type.lowercased().contains(\"user\") || activity.type == \"message\"\n+    }\n }\n \n struct ActivityRow: View {\n     let activity: Activity\n-\n-    var isUserMessage: Bool {\n-        activity.type.lowercased().contains(\"user\") || activity.type == \"message\"\n-    }\n+    let isUserMessage: Bool\n \n     var body: some View {\n         HStack(alignment: .top, spacing: 16) {\ndiff --git a/Jules/Jules/JulesApp.swift b/Jules/Jules/JulesApp.swift\nindex 9db6c05..84474a3 100644\n--- a/Jules/Jules/JulesApp.swift\n+++ b/Jules/Jules/JulesApp.swift\n@@ -9,6 +9,10 @@ import SwiftUI\n \n @main\n struct JulesApp: App {\n+    init() {\n+        NotificationManager.shared.requestAuthorization()\n+    }\n+\n     var body: some Scene {\n         WindowGroup {\n             ContentView()\ndiff --git a/Jules/Jules/NotificationManager.swift b/Jules/Jules/NotificationManager.swift\nnew file mode 100644\nindex 0000000..2b19389\n--- /dev/null\n+++ b/Jules/Jules/NotificationManager.swift\n@@ -0,0 +1,33 @@\n+import UserNotifications\n+\n+class NotificationManager {\n+    static let shared = NotificationManager()\n+    \n+    private init() {}\n+    \n+    func requestAuthorization() {\n+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in\n+            if granted {\n+                print(\"Notification authorization granted.\")\n+            } else if let error = error {\n+                print(\"Notification authorization error: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+    \n+    func scheduleNotification(title: String, body: String) {\n+        let content = UNMutableNotificationContent()\n+        content.title = title\n+        content.body = body\n+        content.sound = .default\n+        \n+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)\n+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)\n+        \n+        UNUserNotificationCenter.current().add(request) { error in\n+            if let error = error {\n+                print(\"Error scheduling notification: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+}\n\\ No newline at end of file\n",
+              "baseCommitId": "47348e519d31451e2ae830d9310e57bb7d809c06"
+            }
+          }
+        }
+      ],
+      "id": "00633f80c6dd4172a83c35573c3d77f2"
+    },
+    {
+      "name": "sessions/7020784978948753357/activities/e7f60d9f85f640518aa31c725c39f433",
+      "createTime": "2025-10-05T01:14:11.686173Z",
+      "originator": "agent",
+      "sessionCompleted": {},
+      "artifacts": [
+        {
+          "changeSet": {
+            "source": "sources/github/dalmaer/jules-ios",
+            "gitPatch": {
+              "unidiffPatch": "diff --git a/Jules/Jules/ActivitiesView.swift b/Jules/Jules/ActivitiesView.swift\nindex 94c4b6d..f4d9561 100644\n--- a/Jules/Jules/ActivitiesView.swift\n+++ b/Jules/Jules/ActivitiesView.swift\n@@ -66,7 +66,7 @@ struct ActivitiesView: View {\n                     ScrollView {\n                         VStack(spacing: 12) {\n                             ForEach(activities) { activity in\n-                                ActivityRow(activity: activity)\n+                                ActivityRow(activity: activity, isUserMessage: isUserMessage(activity: activity))\n                             }\n                         }\n                         .padding()\n@@ -114,21 +114,34 @@ struct ActivitiesView: View {\n         errorMessage = nil\n \n         do {\n-            activities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)\n+            let newActivities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)\n+\n+            // Check if there are new activities and if the latest one is from the agent\n+            if let latestActivity = newActivities.first,\n+               !activities.contains(where: { $0.id == latestActivity.id }),\n+               !isUserMessage(activity: latestActivity) {\n+                NotificationManager.shared.scheduleNotification(\n+                    title: \"New Message from Agent\",\n+                    body: latestActivity.content\n+                )\n+            }\n+\n+            activities = newActivities\n         } catch {\n             errorMessage = \"Failed to load activities: \\(error.localizedDescription)\"\n         }\n \n         isLoading = false\n     }\n+\n+    private func isUserMessage(activity: Activity) -\u003e Bool {\n+        activity.type.lowercased().contains(\"user\") || activity.type == \"message\"\n+    }\n }\n \n struct ActivityRow: View {\n     let activity: Activity\n-\n-    var isUserMessage: Bool {\n-        activity.type.lowercased().contains(\"user\") || activity.type == \"message\"\n-    }\n+    let isUserMessage: Bool\n \n     var body: some View {\n         HStack(alignment: .top, spacing: 16) {\ndiff --git a/Jules/Jules/JulesApp.swift b/Jules/Jules/JulesApp.swift\nindex 9db6c05..84474a3 100644\n--- a/Jules/Jules/JulesApp.swift\n+++ b/Jules/Jules/JulesApp.swift\n@@ -9,6 +9,10 @@ import SwiftUI\n \n @main\n struct JulesApp: App {\n+    init() {\n+        NotificationManager.shared.requestAuthorization()\n+    }\n+\n     var body: some Scene {\n         WindowGroup {\n             ContentView()\ndiff --git a/Jules/Jules/NotificationManager.swift b/Jules/Jules/NotificationManager.swift\nnew file mode 100644\nindex 0000000..2b19389\n--- /dev/null\n+++ b/Jules/Jules/NotificationManager.swift\n@@ -0,0 +1,33 @@\n+import UserNotifications\n+\n+class NotificationManager {\n+    static let shared = NotificationManager()\n+    \n+    private init() {}\n+    \n+    func requestAuthorization() {\n+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in\n+            if granted {\n+                print(\"Notification authorization granted.\")\n+            } else if let error = error {\n+                print(\"Notification authorization error: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+    \n+    func scheduleNotification(title: String, body: String) {\n+        let content = UNMutableNotificationContent()\n+        content.title = title\n+        content.body = body\n+        content.sound = .default\n+        \n+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)\n+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)\n+        \n+        UNUserNotificationCenter.current().add(request) { error in\n+            if let error = error {\n+                print(\"Error scheduling notification: \\(error.localizedDescription)\")\n+            }\n+        }\n+    }\n+}\n\\ No newline at end of file\n",
+              "baseCommitId": "47348e519d31451e2ae830d9310e57bb7d809c06",
+              "suggestedCommitMessage": "This commit introduces local notifications to the Jules iOS app.\n\nA `NotificationManager` singleton is created to handle notification authorization and scheduling. The app now requests notification permissions on launch.\n\nWhen new activities are fetched, the app checks if the latest activity is from the agent and, if so, triggers a local notification with the message content. This enhances the user experience by proactively alerting users to new agent messages."
+            }
+          }
+        }
+      ],
+      "id": "e7f60d9f85f640518aa31c725c39f433"
+    }
+  ]
+}
+
+==================================
