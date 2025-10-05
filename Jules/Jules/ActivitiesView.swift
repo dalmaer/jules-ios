@@ -65,8 +65,8 @@ struct ActivitiesView: View {
                 } else {
                     ScrollView {
                         VStack(spacing: 12) {
-                            ForEach(activities) { activity in
-                                ActivityRow(activity: activity, isUserMessage: isUserMessage(activity: activity))
+                            ForEach(activities.filter { hasDisplayableContent($0) }) { activity in
+                                ActivityRow(activity: activity)
                             }
                         }
                         .padding()
@@ -137,11 +137,18 @@ struct ActivitiesView: View {
     private func isUserMessage(activity: Activity) -> Bool {
         activity.type.lowercased().contains("user") || activity.type == "message"
     }
+
+    private func hasDisplayableContent(_ activity: Activity) -> Bool {
+        return !activity.content.isEmpty
+    }
 }
 
 struct ActivityRow: View {
     let activity: Activity
-    let isUserMessage: Bool
+
+    var isUserMessage: Bool {
+        activity.type.lowercased().contains("user") || activity.type == "message"
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
