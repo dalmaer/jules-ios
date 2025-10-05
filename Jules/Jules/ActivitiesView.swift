@@ -240,6 +240,7 @@ struct SessionCompletedView: View {
                         .foregroundColor(.gray)
                     Text(commitMsg)
                         .font(.body.monospaced())
+                        .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color.black.opacity(0.3))
@@ -465,7 +466,6 @@ struct SendMessageSheet: View {
                 }
                 .padding()
             }
-            .navigationTitle("Talk to Agent")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -473,6 +473,11 @@ struct SendMessageSheet: View {
                         dismiss()
                     }
                     .foregroundColor(.white)
+                }
+                ToolbarItem(placement: .principal) {
+                    Text("Talk to Agent")
+                        .font(.headline)
+                        .foregroundColor(.white)
                 }
             }
         }

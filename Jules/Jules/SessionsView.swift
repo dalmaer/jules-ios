@@ -165,7 +165,7 @@ struct SessionRow: View {
     let session: Session
 
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(alignment: .center, spacing: 16) {
             // Icon
             Image(systemName: "chevron.left.forwardslash.chevron.right")
                 .font(.title2)
@@ -178,6 +178,7 @@ struct SessionRow: View {
                 Text(session.title ?? "Untitled Session")
                     .font(.headline)
                     .foregroundColor(.white)
+                    .multilineTextAlignment(.leading)
                     .lineLimit(2)
 
                 HStack(spacing: 8) {
