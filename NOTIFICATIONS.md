@@ -20,8 +20,12 @@ This app now supports background notifications for new Jules activities, even wh
    - ✅ **Background fetch**
    - ✅ **Background processing**
 
-### 2. Add Info.plist to Build
-The `Info.plist` file has been created with the necessary background task identifier. Xcode should automatically include it.
+### 2. Add Background Task Identifier
+1. In the **Jules** target, go to the **Info** tab
+2. Add a new key: **Permitted background task scheduler identifiers** (or `BGTaskSchedulerPermittedIdentifiers`)
+3. Add an item with value: `com.jules.ios.refresh`
+
+Alternatively, you can add this to the target's Info.plist settings directly in Xcode.
 
 ## Testing Background Notifications
 
