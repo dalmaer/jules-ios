@@ -36,4 +36,10 @@ class RecentSourcesManager {
 
         UserDefaults.standard.set(recentIDs, forKey: key)
     }
+
+    func removeRecentSource(id: String) {
+        var recentIDs = getRecentSourceIDs()
+        recentIDs.removeAll { $0 == id }
+        UserDefaults.standard.set(recentIDs, forKey: key)
+    }
 }

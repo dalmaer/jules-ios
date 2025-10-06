@@ -118,6 +118,16 @@ struct HomeView: View {
                                                 NavigationLink(value: source) {
                                                     SourceRow(source: source, isRecent: true)
                                                 }
+                                                .contextMenu {
+                                                    Button(role: .destructive) {
+                                                        RecentSourcesManager.shared.removeRecentSource(id: source.id)
+                                                        Task {
+                                                            await loadSources()
+                                                        }
+                                                    } label: {
+                                                        Label("Remove from Recents", systemImage: "trash")
+                                                    }
+                                                }
                                             }
                                         }
                                         .padding(.horizontal)
