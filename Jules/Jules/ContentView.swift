@@ -101,8 +101,14 @@ struct FirstLaunchAPIKeyView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Setup")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Setup")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+            }
             .interactiveDismissDisabled()
             .alert("API Key", isPresented: $showAlert) {
                 Button("OK", role: .cancel) {

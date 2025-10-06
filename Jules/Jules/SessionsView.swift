@@ -324,7 +324,6 @@ struct CreateSessionSheet: View {
                 }
                 .padding()
             }
-            .navigationTitle("Create Session")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -332,6 +331,11 @@ struct CreateSessionSheet: View {
                         dismiss()
                     }
                     .foregroundColor(.white)
+                }
+                ToolbarItem(placement: .principal) {
+                    Text("Create Session")
+                        .font(.headline)
+                        .foregroundColor(.white)
                 }
             }
         }

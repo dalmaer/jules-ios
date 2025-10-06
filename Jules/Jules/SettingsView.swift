@@ -67,7 +67,6 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal, 20)
             }
-            .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -75,6 +74,11 @@ struct SettingsView: View {
                         Image(systemName: "arrow.left")
                             .foregroundColor(.white)
                     }
+                }
+                ToolbarItem(placement: .principal) {
+                    Text("Settings")
+                        .font(.headline)
+                        .foregroundColor(.white)
                 }
             }
             .alert("API Key", isPresented: $showAlert) {
