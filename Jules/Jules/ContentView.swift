@@ -13,6 +13,9 @@ struct ContentView: View {
     var body: some View {
         HomeView()
             .task {
+                // Request notification permissions
+                _ = await NotificationManager.shared.requestPermission()
+
                 // Check if API key exists on first launch
                 if !KeychainManager.shared.hasAPIKey() {
                     showAPIKeyPrompt = true

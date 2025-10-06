@@ -131,11 +131,17 @@ struct SessionsView: View {
         errorMessage = nil
 
         do {
-            let fetchedSessions = try await JulesAPIClient.shared.fetchSessions(
-                sourceId: source.id,
-                forceRefresh: forceRefresh
-            )
-            sessions = fetchedSessions
+            // Fetch all sessions and filter client-side for this source
+            // The API doesn't support server-side filtering
+            let allSessions = try await JulesAPIClient.shared.fetchSessions(forceRefresh: forceRefresh)
+
+            // Filter sessions that belong to this source
+            sessions = allSessions.filter { session in
+                guard let sourceContext = session.sourceContext else { return false }
+                return sourceContext.source == source.name ||
+                       sourceContext.source == source.id ||
+                       sourceContext.source.contains(source.githubRepo.repo)
+            }
         } catch let apiError as JulesAPIError {
             switch apiError {
             case .noAPIKey:

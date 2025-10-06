@@ -14,6 +14,8 @@ struct ActivitiesView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var showMessageSheet = false
+    @State private var pollingTimer: Timer?
+    @State private var isPolling = false
 
     var body: some View {
         ZStack {
@@ -112,9 +114,16 @@ struct ActivitiesView: View {
         }
         .task {
             await loadActivities()
+            startPolling()
+
+            // Add this session to background monitoring
+            BackgroundTaskManager.shared.addMonitoredSession(session.id, title: session.title ?? "Session")
         }
         .refreshable {
             await loadActivities()
+        }
+        .onDisappear {
+            stopPolling()
         }
     }
 
@@ -142,15 +151,37 @@ struct ActivitiesView: View {
         return false
     }
 
-    private func loadActivities() async {
-        isLoading = true
+    private func loadActivities(silent: Bool = false) async {
+        if !silent {
+            isLoading = true
+        }
         errorMessage = nil
 
         do {
             print("Loading activities for session: \(session.id)")
             print("Session name: \(session.name)")
-            activities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)
-            print("Loaded \(activities.count) activities")
+
+            let newActivities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)
+            print("Loaded \(newActivities.count) activities")
+
+            // Check for new activities from agent
+            if let latestActivity = newActivities.first,
+               !activities.contains(where: { $0.id == latestActivity.id }),
+               latestActivity.originator?.lowercased() != "user" {
+
+                // Extract notification content
+                let notificationBody = extractNotificationContent(from: latestActivity)
+                let sessionTitle = session.title ?? "Session"
+
+                NotificationManager.shared.scheduleNotificationWithData(
+                    title: "Jules: \(sessionTitle)",
+                    body: notificationBody,
+                    sessionId: session.id,
+                    identifier: latestActivity.id
+                )
+            }
+
+            activities = newActivities
         } catch let apiError as JulesAPIError {
             switch apiError {
             case .httpError(let code):
@@ -164,7 +195,54 @@ struct ActivitiesView: View {
             errorMessage = "Failed to load activities: \(error.localizedDescription)"
         }
 
-        isLoading = false
+        if !silent {
+            isLoading = false
+        }
+    }
+
+    private func extractNotificationContent(from activity: Activity) -> String {
+        if let progress = activity.progressUpdated {
+            if let title = progress.title, !title.isEmpty {
+                return title
+            }
+            if let description = progress.description, !description.isEmpty {
+                return description
+            }
+        }
+
+        if activity.sessionCompleted != nil {
+            return "Session completed"
+        }
+
+        if let plan = activity.planGenerated?.plan, let steps = plan.steps, !steps.isEmpty {
+            return "Generated a plan with \(steps.count) steps"
+        }
+
+        if activity.planApproved != nil {
+            return "Plan approved"
+        }
+
+        if let artifact = activity.artifacts?.first,
+           let commitMsg = artifact.changeSet?.gitPatch?.suggestedCommitMessage,
+           !commitMsg.isEmpty {
+            return commitMsg
+        }
+
+        return "New activity"
+    }
+
+    private func startPolling() {
+        // Poll every 30 seconds
+        pollingTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { _ in
+            Task {
+                await loadActivities(silent: true)
+            }
+        }
+    }
+
+    private func stopPolling() {
+        pollingTimer?.invalidate()
+        pollingTimer = nil
     }
 }
 

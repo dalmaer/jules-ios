@@ -144,27 +144,10 @@ class JulesAPIClient {
         return sources
     }
 
-    func fetchSessions(pageSize: Int = 50, sourceId: String, forceRefresh: Bool = false) async throws -> [Session] {
-        // If not forcing a refresh, try to return cached sessions first
-        if !forceRefresh, let cachedSessions = CacheManager.shared.getSessions(forSourceId: sourceId) {
-            return cachedSessions
-        }
-
-        // If no cache hit or forcing refresh, fetch from the network
-        var path = "/sessions?pageSize=\(pageSize)"
-        // URL encode the source parameter
-        if let encodedSource = sourceId.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            path += "&source=\(encodedSource)"
-        }
-
-        let request = try createRequest(path: path)
+    func fetchSessions(pageSize: Int = 50, forceRefresh: Bool = false) async throws -> [Session] {
+        let request = try createRequest(path: "/sessions?pageSize=\(pageSize)")
         let response: SessionsResponse = try await performRequest(request)
-        let sessions = response.sessions ?? []
-
-        // Store the newly fetched sessions in the cache for the specific source
-        CacheManager.shared.setSessions(sessions, forSourceId: sourceId)
-
-        return sessions
+        return response.sessions ?? []
     }
 
     func createSession(title: String, prompt: String, sourceId: String) async throws -> Session {

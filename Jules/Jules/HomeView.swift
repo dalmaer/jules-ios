@@ -13,9 +13,11 @@ struct HomeView: View {
     @State private var isLoading = false
     @State private var showSettings = false
     @State private var errorMessage: String?
+    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
+    @State private var navigationPath = NavigationPath()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             ZStack {
                 Color(red: 0.11, green: 0.11, blue: 0.15)
                     .ignoresSafeArea()
@@ -160,6 +162,20 @@ struct HomeView: View {
             }
             .task {
                 await loadSources()
+            }
+            .onChange(of: navigationCoordinator.sessionToOpen) { _, newSession in
+                if let session = newSession {
+                    // Find the source for this session
+                    if let source = (recentSources + otherSources).first(where: { source in
+                        session.sourceContext?.source == source.id ||
+                        session.sourceContext?.source == source.name
+                    }) {
+                        navigationPath.append(source)
+                        navigationPath.append(session)
+                    }
+                    // Clear the session after navigation
+                    navigationCoordinator.sessionToOpen = nil
+                }
             }
         }
     }

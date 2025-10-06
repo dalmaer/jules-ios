@@ -72,6 +72,8 @@ Screens for the design of this application are in the `screens/` directory. Each
 - Networking implemented with `URLSession` and `async/await`.
 - Secure API key storage handled via **Keychain**.
 
+NOTE: This is an iOS application. Do NOT do anything with the code.html files, or at any time think there is a web component and make changes there.
+
 ### Project Setup
 1. Open **Xcode** (latest stable version).
 2. Create a new project named `jules-ios`.
