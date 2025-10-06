@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import UserNotifications
 
 @main
@@ -53,27 +54,26 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
 }
 
+@MainActor
 class NavigationCoordinator: ObservableObject {
     @Published var sessionToOpen: Session?
 
     init() {
         // Listen for notification taps
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("OpenSession"), object: nil, queue: .main) { notification in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("OpenSession"), object: nil, queue: .main) { [weak self] notification in
             if let sessionId = notification.object as? String {
-                self.openSession(sessionId: sessionId)
+                self?.openSession(sessionId: sessionId)
             }
         }
     }
 
     private func openSession(sessionId: String) {
-        Task {
+        Task { @MainActor in
             do {
                 // Fetch all sessions to find the one we need
                 let sessions = try await JulesAPIClient.shared.fetchSessions()
                 if let session = sessions.first(where: { $0.id == sessionId }) {
-                    await MainActor.run {
-                        self.sessionToOpen = session
-                    }
+                    self.sessionToOpen = session
                 }
             } catch {
                 print("Error fetching session: \(error)")

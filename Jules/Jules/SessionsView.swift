@@ -81,6 +81,10 @@ struct SessionsView: View {
                         }
                         .padding()
                     }
+                    .onAppear {
+                        // Style the refresh control to be white
+                        UIRefreshControl.appearance().tintColor = .white
+                    }
                     .refreshable {
                         await loadSessions(forceRefresh: true)
                     }
@@ -107,6 +111,7 @@ struct SessionsView: View {
                 .padding()
             }
         }
+        .tint(.white)
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: Session.self) { session in
             ActivitiesView(session: session)

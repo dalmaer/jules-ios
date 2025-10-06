@@ -119,6 +119,10 @@ struct ActivitiesView: View {
             // Add this session to background monitoring
             BackgroundTaskManager.shared.addMonitoredSession(session.id, title: session.title ?? "Session")
         }
+        .onAppear {
+            // Style the refresh control to be white
+            UIRefreshControl.appearance().tintColor = .white
+        }
         .refreshable {
             await loadActivities()
         }
@@ -164,10 +168,14 @@ struct ActivitiesView: View {
             let newActivities = try await JulesAPIClient.shared.fetchActivities(sessionId: session.id)
             print("Loaded \(newActivities.count) activities")
 
-            // Check for new activities from agent
+            // Get the last known activity ID for this session
+            let lastKnownActivityId = UserDefaults.standard.string(forKey: "lastActivity_\(session.id)")
+
+            // Check for new activities from agent (only if we have a previous activity to compare against)
             if let latestActivity = newActivities.first,
-               !activities.contains(where: { $0.id == latestActivity.id }),
-               latestActivity.originator?.lowercased() != "user" {
+               latestActivity.originator?.lowercased() != "user",
+               let lastKnownId = lastKnownActivityId,
+               latestActivity.id != lastKnownId {
 
                 // Extract notification content
                 let notificationBody = extractNotificationContent(from: latestActivity)
@@ -179,6 +187,11 @@ struct ActivitiesView: View {
                     sessionId: session.id,
                     identifier: latestActivity.id
                 )
+            }
+
+            // Update the last known activity ID
+            if let latestActivity = newActivities.first {
+                UserDefaults.standard.set(latestActivity.id, forKey: "lastActivity_\(session.id)")
             }
 
             activities = newActivities

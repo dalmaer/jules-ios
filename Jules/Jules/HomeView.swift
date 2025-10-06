@@ -154,6 +154,10 @@ struct HomeView: View {
                                     }
                                 }
                             }
+                            .onAppear {
+                                // Style the refresh control to be white
+                                UIRefreshControl.appearance().tintColor = .white
+                            }
                             .refreshable {
                                 await loadSources(forceRefresh: true)
                             }
