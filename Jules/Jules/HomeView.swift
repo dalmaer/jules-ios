@@ -82,7 +82,7 @@ struct HomeView: View {
                                     .foregroundColor(.white)
                                     .multilineTextAlignment(.center)
                                 Button("Retry") {
-                                    Task { await loadSources() }
+                                    Task { await loadSources(forceRefresh: true) }
                                 }
                                 .padding(.horizontal, 24)
                                 .padding(.vertical, 12)
@@ -142,6 +142,9 @@ struct HomeView: View {
                                     }
                                 }
                             }
+                            .refreshable {
+                                await loadSources(forceRefresh: true)
+                            }
                         }
 
                         Spacer()
@@ -161,12 +164,14 @@ struct HomeView: View {
         }
     }
 
-    private func loadSources() async {
-        isLoading = true
+    private func loadSources(forceRefresh: Bool = false) async {
+        if !forceRefresh {
+            isLoading = true
+        }
         errorMessage = nil
 
         do {
-            let fetchedSources = try await JulesAPIClient.shared.fetchSources()
+            let fetchedSources = try await JulesAPIClient.shared.fetchSources(forceRefresh: forceRefresh)
             let recentIDs = RecentSourcesManager.shared.getRecentSourceIDs()
             let recentIDSet = Set(recentIDs)
 

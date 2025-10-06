@@ -46,7 +46,7 @@ struct SessionsView: View {
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
                         Button("Retry") {
-                            Task { await loadSessions() }
+                            Task { await loadSessions(forceRefresh: true) }
                         }
                         .padding(.horizontal, 24)
                         .padding(.vertical, 12)
@@ -81,6 +81,9 @@ struct SessionsView: View {
                         }
                         .padding()
                     }
+                    .refreshable {
+                        await loadSessions(forceRefresh: true)
+                    }
                 }
 
                 // Create Session Button
@@ -110,7 +113,7 @@ struct SessionsView: View {
         }
         .sheet(isPresented: $showCreateSession) {
             CreateSessionSheet(source: source) {
-                Task { await loadSessions() }
+                Task { await loadSessions(forceRefresh: true) }
             }
         }
         .task {
@@ -121,23 +124,18 @@ struct SessionsView: View {
         }
     }
 
-    private func loadSessions() async {
-        isLoading = true
+    private func loadSessions(forceRefresh: Bool = false) async {
+        if !forceRefresh {
+            isLoading = true
+        }
         errorMessage = nil
 
         do {
-            // Fetch all sessions and filter client-side for this source
-            // The API may not support server-side filtering in alpha
-            let allSessions = try await JulesAPIClient.shared.fetchSessions()
-
-            // Filter sessions that belong to this source
-            // The sourceContext.source field should contain the source identifier
-            sessions = allSessions.filter { session in
-                guard let sourceContext = session.sourceContext else { return false }
-                return sourceContext.source == source.name ||
-                       sourceContext.source == source.id ||
-                       sourceContext.source.contains(source.githubRepo.repo)
-            }
+            let fetchedSessions = try await JulesAPIClient.shared.fetchSessions(
+                sourceId: source.id,
+                forceRefresh: forceRefresh
+            )
+            sessions = fetchedSessions
         } catch let apiError as JulesAPIError {
             switch apiError {
             case .noAPIKey:

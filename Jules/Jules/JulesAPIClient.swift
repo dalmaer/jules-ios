@@ -127,23 +127,44 @@ class JulesAPIClient {
 
     // MARK: - API Methods
 
-    func fetchSources() async throws -> [Source] {
+    func fetchSources(forceRefresh: Bool = false) async throws -> [Source] {
+        // If not forcing a refresh, try to return cached sources first
+        if !forceRefresh, let cachedSources = CacheManager.shared.getSources() {
+            return cachedSources
+        }
+
+        // If no cache hit or forcing refresh, fetch from the network
         let request = try createRequest(path: "/sources")
         let response: SourcesResponse = try await performRequest(request)
-        return response.sources ?? []
+        let sources = response.sources ?? []
+
+        // Store the newly fetched sources in the cache
+        CacheManager.shared.setSources(sources)
+
+        return sources
     }
 
-    func fetchSessions(pageSize: Int = 50, sourceId: String? = nil) async throws -> [Session] {
-        var path = "/sessions?pageSize=\(pageSize)"
-        if let sourceId = sourceId {
-            // URL encode the source parameter
-            if let encodedSource = sourceId.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                path += "&source=\(encodedSource)"
-            }
+    func fetchSessions(pageSize: Int = 50, sourceId: String, forceRefresh: Bool = false) async throws -> [Session] {
+        // If not forcing a refresh, try to return cached sessions first
+        if !forceRefresh, let cachedSessions = CacheManager.shared.getSessions(forSourceId: sourceId) {
+            return cachedSessions
         }
+
+        // If no cache hit or forcing refresh, fetch from the network
+        var path = "/sessions?pageSize=\(pageSize)"
+        // URL encode the source parameter
+        if let encodedSource = sourceId.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            path += "&source=\(encodedSource)"
+        }
+
         let request = try createRequest(path: path)
         let response: SessionsResponse = try await performRequest(request)
-        return response.sessions ?? []
+        let sessions = response.sessions ?? []
+
+        // Store the newly fetched sessions in the cache for the specific source
+        CacheManager.shared.setSessions(sessions, forSourceId: sourceId)
+
+        return sessions
     }
 
     func createSession(title: String, prompt: String, sourceId: String) async throws -> Session {
